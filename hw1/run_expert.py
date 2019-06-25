@@ -17,6 +17,7 @@ import tf_util
 import gym
 import load_policy
 
+
 def main():
     import argparse
     parser = argparse.ArgumentParser()
