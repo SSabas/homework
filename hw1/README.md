@@ -67,8 +67,8 @@ To note, the above results are all based on the same architecture and no hyperpa
 ### 2.3 Analysis of hyperparameters
 To test the performance of the BC model run 
 `run_bc_hyper_test.py` script. The hyperparameter tuning based on the size of training data is shown in Figure below:
-<p float="center">
-  <img src="./results/bc_hyperparameter/behavioral_cloning/Ant-v2.pdf" width="350"/>
+<p float="left">
+  <img src="./results/bc_hyperparameter/Ant-v2.pdf" width="350"/>
 </p>
 
 
