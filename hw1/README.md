@@ -65,4 +65,9 @@ To plot the results in table, one can tabulating function `plot_bc_results` from
 To note, the above results are all based on the same architecture and no hyperparameter tuning was performed.
 
 ### 2.3 Analysis of hyperparameters
-To test the performance of the BC models run:
+To test the performance of the BC model run 
+`run_bc_hyper_test.py` script. The hyperparameter tuning based on the size of training data is shown in Figure below:
+
+  <img src="./results/bc_hyperparameter/behavioral_cloning/Ant-v2.pdf" width="350"/>
+
+
