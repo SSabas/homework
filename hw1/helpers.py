@@ -15,6 +15,7 @@ import json
 import pickle
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from pytablewriter import MarkdownTableWriter
@@ -99,7 +100,7 @@ def train_test_val_split(X, y,
     return data
 
 
-def plot_bc_results(markdown_format='yes'):
+def plot_bc_results():
 
     # Get environment names
     envs = ['Ant-v2', 'HalfCheetah-v2',
@@ -129,6 +130,53 @@ def plot_bc_results(markdown_format='yes'):
         writer.table_name = "add_index_column"
         writer.from_dataframe(df,add_index_column=True)
 
-        return writer.write_table()
+    return writer.write_table()
 
-    return print(df)
+
+def plot_bc_hyper_results(env, to_save='yes'):
+
+    # Get data
+    with open(os.getcwd() + "/results/bc_hyperparameter/" + env + ".pkl", 'rb') as f:
+        bc_data = pickle.loads(f.read())
+        print('BC data loaded.')
+
+    with open(os.getcwd() + "/expert_data/" + env + ".pkl", 'rb') as f:
+        expert_data = pickle.loads(f.read())
+        print('Expert data loaded.')
+
+
+    bc_mean = np.array([])
+    bc_std = np.array([])
+
+    expert_mean = np.mean(expert_data['returns'])
+    expert_std = np.std(expert_data['returns'])
+
+    # Retrieve results
+    for i in sorted(bc_data.keys()):
+        print(i)
+        bc_mean = np.append(bc_mean, np.mean(bc_data[i]['returns']))
+        bc_std = np.append(bc_std, np.std(bc_data[i]['returns']))
+
+    # Draw lines
+    plt.plot(sorted(bc_data.keys()), bc_mean,
+             '--', color="midnightblue", label="BC Score")
+    plt.plot(sorted(bc_data.keys()), [expert_mean]*len(bc_mean),
+             color="darkred", label="Expert Score")
+
+    # Draw bands
+    plt.fill_between(sorted(bc_data.keys()), bc_mean - bc_std, bc_mean + bc_std,
+                     color="dodgerblue", alpha=0.3)
+    plt.fill_between(sorted(bc_data.keys()), [expert_mean - expert_std]*len(bc_mean), [expert_mean + expert_std]*len(bc_mean),
+                     color="lightcoral", alpha=0.3)
+
+    # Create plot
+    plt.title("Learning Curve of %s" %env)
+    plt.xlabel("Training Set Size"), plt.ylabel("Reward"), plt.legend(loc="best")
+    plt.tight_layout()
+    plt.show()
+
+    if to_save='yes':
+        plt.savefig(os.getcwd() + '/results/bc_hyperparameter/' + env + '.pdf',
+                    bbox_inches='tight')
+
+    return

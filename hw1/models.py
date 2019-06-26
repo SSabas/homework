@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 import gym
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
+from keras import optimizers
 from sklearn.model_selection import train_test_split
 
 # ------------------------ BUILD KERAS NN MODEL --------------------------------- #
@@ -31,11 +32,12 @@ class SupervisedModel():
         self.model = Sequential()
         self.model.add(Dense(units=layers[0], input_dim=input_len, activation=act_function))
         for i in range(0, (len(layers)-1)):
-            print(layers[i+1])
             self.model.add(Dense(layers[i+1], activation=act_function))
-            # self.model.add(Dropout(0.2))
-        self.model.add(Dense(units=output_len, activation=act_function))
-        self.model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
+            self.model.add(Dropout(0.2))
+        self.model.add(Dense(units=output_len, activation='linear'))
+        opt = optimizers.Adam(lr=0.001, beta_1=0.8,  beta_2=0.999,
+                              epsilon=1e-7, decay=0.0, amsgrad=False)
+        self.model.compile(loss='mse', optimizer=opt, metrics=['accuracy'])
 
     def train(self, data, epochs, verbose=True, val_prop=0.1, batch_size=128):
         X_train, X_val, y_train, y_val = train_test_split(data['observations'],
