@@ -16,6 +16,7 @@ import pickle
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
+import gym
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
 from sklearn.model_selection import train_test_split
@@ -47,7 +48,7 @@ class SupervisedModel():
                        validation_data=(X_val, y_val))
 
     def save(self, filename):
-        self.model.save(os.getcwd() + '/models/' + filename + '.h5')
+        self.model.save(os.getcwd() + '/models/bc/' + filename + '.h5')
     # def load(self, filename):
     #     self.model.load(os.getcwd() + '/models/' + filename + '.h5')
 
@@ -73,14 +74,25 @@ class SupervisedModel():
         with open(os.getcwd() + '/results/bc/' + filename + '.pkl', "wb") as f:
             pickle.dump(self.model.history.history, f)
 
+
+# ------------------------ BUILD KERAS NN MODEL --------------------------------- #
+
+
 # ------------------ EVALUATE BEHAVIORAL CLONING MODEL  -------------------- #
 
 
-def evaluate_bc_model(model, data, env, expert_policy, num_rollouts,
+def evaluate_bc_model(env, expert_policy, num_rollouts,
                       max_timesteps=None, render=False):
 
+    # Define the maximum number of timesteps to be evaluated in each rollout
     if max_timesteps is None:
         max_timesteps = env.spec.timestep_limit
+
+    # Get the expert policy model
+    agent = gym.make(env)
+
+    # Get the cloned model
+    student = load_model(os.getcwd() + '/models/bc/' + agent + '.h5')
 
     returns = []
     observations = []
