@@ -69,6 +69,32 @@ To test the performance of the BC model run
 `run_bc_hyper_test.py` script. The hyperparameter tuning based on the size of training data is shown in Figure below:
 <p float="left">
   <img src="./results/bc_hyperparameter/Ant-v2.png" width="350"/>
+  <img src="./results/bc_hyperparameter/HalfCheetah-v2.png" width="350"/>
+  <img src="./results/bc_hyperparameter/Hopper-v2.png" width="350"/>
+  <img src="./results/bc_hyperparameter/Humanoid-v2.png" width="350"/>
+  <img src="./results/bc_hyperparameter/Reacher-v2.png" width="350"/>
+  <img src="./results/bc_hyperparameter/Walker2d-v2.png" width="350"/>
 </p>
+To note, the above figures have been trained with 20 epochs (the results from the table are based on 100 epochs).
+
+## Section 2 - DAgger Algorithm
+
+### 3.1 Implementing behavioral cloning
+
+The implementation of DAgger algorithm is given in python script `run_dagger.py`,  which uses the expert policy and the behavioral cloning algorithm to great new samples and evaluate the observations. To test the performance of DAgger BC run:
+
+```bash
+python run_dagger.py env
+```
+where env denotes the environment (i.e. the agents). The results are saved to `results/dagger_evaluation/` as pickle files. In addition, the comparison between BC and DAgger algorithms is given on plots below (both have been trained on the same sized training set for appropriate comparison):
+<p float="left">
+  <img src="./results/dagger_evaluation/Ant-v2.png" width="350"/>
+  <img src="./results/dagger_evaluation/HalfCheetah-v2.png" width="350"/>
+  <img src="./results/dagger_evaluation/Hopper-v2.png" width="350"/>
+  <img src="./results/dagger_evaluation/Humanoid-v2.png" width="350"/>
+  <img src="./results/dagger_evaluation/Reacher-v2.png" width="350"/>
+  <img src="./results/dagger_evaluation/Walker2d-v2.png" width="350"/>
+</p>
+To note, once again the above figures have been trained with 20 epochs (the results from the table are based on 100 epochs).
 
 

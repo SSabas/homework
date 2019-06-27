@@ -23,6 +23,7 @@ from keras.models import load_model
 import load_policy
 import tf_util
 import models
+import helpers
 
 # -------------------- PARSE PARAMETERS AND TRAIN MODEL ------------------------- #
 
@@ -44,6 +45,7 @@ def main():
     parser.add_argument('--layers', type=int, nargs='+', default=(100, 100, 100))
     parser.add_argument('--act_function', type=str, default='relu')
     parser.add_argument('--iter_steps', type=int, default=20)
+    parser.add_argument('--to_plot', type=str, default='yes')
 
     args = parser.parse_args()
 
@@ -114,6 +116,9 @@ def main():
     if args.to_save == 'yes':
         with open(os.path.join('results/bc_hyperparameter/', args.env + '.pkl'), 'wb') as f:
             pickle.dump(output, f, pickle.HIGHEST_PROTOCOL)
+
+    if args.to_plot == 'yes':
+        helpers.plot_bc_hyper_results(args.env, bc_data=output, to_save='yes')
 
     return output
 
